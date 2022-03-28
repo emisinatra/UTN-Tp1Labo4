@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP N°1</title>
+</head>
+<body>
+    <div class="form">
+        <label for="user">Usuario</label>
+        <input placeholder="Ingrese usuario" type="text" id="user" name="user">
+        <label for="password">Clave</label>
+        <input placeholder="Ingrese clave" type="text" id="password" name="password">
+        <button id="button" onclick="login()">Ingresar</button>
+        <div id="alertPlaceholder"></div>
+    </div>
+    <script>
+const login = async()=>{
+        const user = document.getElementById('user').value
+        const password = document.getElementById('password').value
+        document.getElementById('alertPlaceholder').innerHTML = "";
+
+        if (user === "") {
+            let wrapper = document.createElement('div')
+            wrapper.innerHTML = '<div class="alert-warning" role="alert">Ingrese el usuario</div>'
+            document.getElementById('alertPlaceholder').append(wrapper);
+            return
+        }  
+
+        if (password === "") {
+            let wrapper = document.createElement('div')
+            wrapper.innerHTML = '<div class="alert-warning" role="alert">Ingrese la clave</div>'
+            document.getElementById('alertPlaceholder').append(wrapper);
+            return
+        }
+
+
+        let response = await fetch(`http://168.194.207.98:8081/tp/login.php?user=${user}&pass=${password}`,{
+            method:"POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const data = await response.json()
+        console.log(data)
+        if (data.respuesta === "OK") {
+            document.location.href = "lista.html"
+        }else{
+            let wrapper = document.createElement('div')
+            wrapper.innerHTML = '<div class="alert-warning" role="alert">Usuario y/o contraseña incorrecta</div>'
+            document.getElementById('alertPlaceholder').append(wrapper);
+            return
+        }
+    }
+    </script>
+</body>
+</html>
